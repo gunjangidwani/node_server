@@ -1,0 +1,15 @@
+{
+  "name": "node_backend",
+  "version": "1.0.0",
+  "description": "node backend server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Gunjan Gidwani",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
