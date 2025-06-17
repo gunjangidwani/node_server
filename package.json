@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "node backend server",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
+  "keywords": [
+    "javascript",
+    "backend",
+    "nodejs"
+  ],
   "author": "Gunjan Gidwani",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3"
   }
 }
