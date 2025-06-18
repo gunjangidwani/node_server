@@ -1,14 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
+import { app } from "./app.js";
 dotenv.config({
   path: "./.env",
 });
-const app = express();
+// const app = express();
 
-app.get("/", (req, res) => {
-  res.send("<h1>home Api called</h1>");
-});
+// app.get("/", (req, res) => {
+//   res.send("<h1>home Api called</h1>");
+// });
+
 
 connectDB()
   .then(() => {
