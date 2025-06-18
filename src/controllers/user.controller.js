@@ -17,16 +17,17 @@ const registerUser = asyncHandler(async (req, res) => {
         "email, fullName, username, password are required feilds"
       );
     }
-
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
       $or: [{ username }, { email }],
     });
     if (existedUser) {
-      throw new ApiError(409, "USer with email and username already exists");
+      throw new ApiError(409, "User with email and username already exists");
     }
 
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    const coverImageLocalPath = req.files?.coverImage
+      ? req.files?.coverImage[0]?.path
+      : undefined;
     if (!avatarLocalPath) {
       throw new ApiError(400, "Avatar File is required");
     }
@@ -35,8 +36,11 @@ const registerUser = asyncHandler(async (req, res) => {
       ? await uploadOnCloudinary(coverImageLocalPath)
       : null;
 
-    if (uploadAvatarOnCloudinary) {
-      throw new ApiError(400, "Avatar File is required, Filed to upload File");
+    if (!uploadAvatarOnCloudinary) {
+      throw new ApiError(
+        400,
+        "Avatar File is required, Failed to upload avatar File"
+      );
     }
 
     const user = await User.create({
@@ -44,7 +48,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email,
       password,
       username: username.toLowerCase(),
-      avatar: uploadAvatarOnCloudinary.url,
+      avatar: uploadAvatarOnCloudinary?.url,
       coverImage: uploadCoverImageOnCloudinary?.url || "",
     });
 
