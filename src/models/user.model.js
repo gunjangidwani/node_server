@@ -4,6 +4,11 @@ import JWT from "jsonwebtoken";
 
 const { Schema, model } = mongoose;
 
+const imageSchema = new Schema({
+  imagePublicId: String, // for cloudnary delete url,
+  imageUrl: String,
+});
+
 const userSchema = new Schema(
   {
     username: {
@@ -34,11 +39,11 @@ const userSchema = new Schema(
       index: true,
     },
     avatar: {
-      type: String, // cloudnary url
+      type: imageSchema,
       required: true,
     },
     coverImage: {
-      type: String, // cloudnary url
+      type: imageSchema
     },
     watchHistory: [
       {
@@ -60,7 +65,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.method.isPasswordCorrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
@@ -91,6 +96,5 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-userSchema.methods.generateRefreahToken = function () {};
 
 export const User = model("User", userSchema);
