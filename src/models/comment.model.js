@@ -1,25 +1,26 @@
 import { Schema, model } from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const commentSchema = new Schema(
   {
     content: {
       type: String,
-      required: [true, "Tweet Owner is requited!"],
+      required: [true, "Content is requited!"],
     },
     video: {
       type: Schema.Types.ObjectId,
       ref: "Video",
-      required: [true, "Video Owner is requited!"],
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "Comment Owner is requited!"],
     },
   },
   {
     timestamps: true,
   }
 );
+
+commentSchema.plugin(mongooseAggregatePaginate);
 
 export const Comment = model("Comment", commentSchema);

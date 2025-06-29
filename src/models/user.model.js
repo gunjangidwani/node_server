@@ -4,11 +4,6 @@ import JWT from "jsonwebtoken";
 
 const { Schema, model } = mongoose;
 
-const imageSchema = new Schema({
-  imagePublicId: String, // for cloudnary delete url,
-  imageUrl: String,
-});
-
 const userSchema = new Schema(
   {
     username: {
@@ -39,11 +34,11 @@ const userSchema = new Schema(
       index: true,
     },
     avatar: {
-      type: imageSchema,
+      type: String,
       required: true,
     },
     coverImage: {
-      type: imageSchema
+      type: String,
     },
     watchHistory: [
       {

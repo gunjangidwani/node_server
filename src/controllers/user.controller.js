@@ -54,9 +54,12 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!avatarLocalPath) {
       throw new ApiError(400, "Avatar File is required");
     }
-    const uploadAvatarOnCloudinary = await uploadOnCloudinary(avatarLocalPath);
+    const uploadAvatarOnCloudinary = await uploadOnCloudinary(
+      avatarLocalPath,
+      "img"
+    );
     const uploadCoverImageOnCloudinary = coverImageLocalPath
-      ? await uploadOnCloudinary(coverImageLocalPath)
+      ? await uploadOnCloudinary(coverImageLocalPath, "img")
       : null;
 
     if (!uploadAvatarOnCloudinary) {
@@ -290,7 +293,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
     if (!user) throw new ApiError(400, "User not found");
 
-    const oldPublicId = user.avatar?.imagePublicId;
+    const oldPublicId = user.avatar;
 
     const uploadAvatarOnCloudinary = await uploadOnCloudinary(avatarLocalPath);
 
@@ -305,10 +308,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
       req.user._id,
       {
         $set: {
-          avatar: {
-            imagePublicId: uploadAvatarOnCloudinary?.public_id,
-            imageUrl: uploadAvatarOnCloudinary?.url,
-          },
+          avatar: uploadAvatarOnCloudinary?.url,
         },
       },
       { new: true }
@@ -320,7 +320,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         "Avatar File could not be uploaded, Failed to upload avatar File"
       );
 
-    const deleteResponse = await deleteFromCloudinary(oldPublicId);
+    const deleteResponse = await deleteFromCloudinary(oldPublicId, "img");
     console.log(deleteResponse);
     return res
       .status(200)
@@ -344,7 +344,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
     if (!user) throw new ApiError(400, "User not found");
 
-    const oldPublicId = user.coverImage?.imagePublicId;
+    const oldPublicId = user.coverImage;
 
     const uploadCoverImageOnCloudinary =
       await uploadOnCloudinary(coverImageLocalPath);
@@ -360,10 +360,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
       req.user._id,
       {
         $set: {
-          coverImage: {
-            imagePublicId: uploadCoverImageOnCloudinary?.public_id,
-            imageUrl: uploadCoverImageOnCloudinary?.url,
-          },
+          coverImage: uploadCoverImageOnCloudinary?.url,
         },
       },
       { new: true }
@@ -376,7 +373,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
       );
 
     const deleteResponse = (await oldPublicId)
-      ? deleteFromCloudinary(oldPublicId)
+      ? deleteFromCloudinary(oldPublicId, "img")
       : "";
     console.log(deleteResponse);
     return res

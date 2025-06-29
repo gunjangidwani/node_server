@@ -13,13 +13,11 @@ const playlistSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "Playlist Owner is requited!"],
     },
     videos: [
       {
         type: Schema.Types.ObjectId,
         ref: "Video",
-        required: [true, "Video Owner is requited!"],
       },
     ],
   },

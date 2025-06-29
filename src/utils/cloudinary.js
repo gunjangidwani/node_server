@@ -10,10 +10,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath, path) => {
   try {
     if (!localFilePath) return null;
     const uploadedFile = await cloudinary.uploader.upload(localFilePath, {
+      asset_folder: path,
       resource_type: "auto",
     });
 
@@ -28,13 +29,19 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-const deleteFromCloudinary = async (public_id) => {
+const deleteFromCloudinary = async (cloudinaryFilePath, path) => {
   try {
-    if (!public_id) return null;
-    const response = cloudinary.uploader.destroy(public_id);
-    console.log("File has been deleted successfully", response);
+    if (!cloudinaryFilePath) return null;
+
+    const avatarPublicId = cloudinaryFilePath.split("/").pop().split(".")[0];
+
+    const response = await cloudinary.uploader.destroy(
+      `${path}/${avatarPublicId}`
+    );
+
+    return response;
   } catch (error) {
-    console.log(error);
+    console.error("Error deleting file from Cloudinary:", error);
     return null;
   }
 };
