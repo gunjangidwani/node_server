@@ -212,7 +212,7 @@ const updateVideo = asyncHandler(async (req, res) => {
   try {
     const { videoId } = req.params;
     if (!isValidObjectId(videoId)) {
-      throw new Apierror(400, "Invalid VideoID");
+      throw new ApiError(400, "Invalid VideoID");
     }
 
     // Allow partial updates

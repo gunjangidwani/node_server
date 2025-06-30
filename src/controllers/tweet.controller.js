@@ -70,7 +70,8 @@ const getUserTweets = asyncHandler(async (req, res) => {
 
 const updateTweet = asyncHandler(async (req, res) => {
   //TODO: update tweet
-  const { content, tweetId } = req.body;
+      const { tweetId } = req.params;
+      const { content } = req.body;
   if (!content || !isValidObjectId(tweetId))
     return res
       .status(400)
@@ -105,7 +106,7 @@ const updateTweet = asyncHandler(async (req, res) => {
 
 const deleteTweet = asyncHandler(async (req, res) => {
   //TODO: delete tweet
-  const { tweetId } = req.body;
+  const { tweetId } = req.params;
   if (!tweetId)
     return res.status(400).json(new ApiError(400, "tweetId is required"));
 
